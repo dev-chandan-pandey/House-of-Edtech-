@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
-    "build": "next build",
-    "start": "next start -p 3000",
-    "lint": "eslint . --ext .ts,.tsx",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-     "prisma:seed": "node prisma/seed.js",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch"
-  },
+  "dev": "next dev -p 3000",
+  "build": "prisma generate && next build",
+  "start": "next start -p 3000",
+  "lint": "eslint . --ext .ts,.tsx",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev",
+  "prisma:seed": "node prisma/seed.js",
+  "test": "jest --passWithNoTests",
+  "test:watch": "jest --watch"
+},
   "dependencies": {
     "@prisma/client": "^5.0.0",
     "bcrypt": "^5.1.0",
