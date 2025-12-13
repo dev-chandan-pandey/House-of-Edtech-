@@ -1,4 +1,3 @@
-
 // src/lib/auth.ts
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -27,10 +26,10 @@ const JWT_EXPIRES_IN = '7d'
 // -----------------------------
 // 3. Password helpers
 // -----------------------------
-export const hashPassword = (password: string) =>
+export const hashPassword = async (password: string) =>
   bcrypt.hash(password, 10)
 
-export const verifyPassword = (password: string, hash: string) =>
+export const verifyPassword = async (password: string, hash: string) =>
   bcrypt.compare(password, hash)
 
 // -----------------------------
@@ -48,10 +47,12 @@ export const verifyJwt = (token: string): JwtPayload | null => {
 }
 
 // -----------------------------
-// 5. Read token (SAFE, CORRECT)
+// 5. Read token (✅ NEXT 16 SAFE)
 // -----------------------------
-export const getTokenFromRequest = (req?: Request): string | null => {
-  // ✅ API routes (Request available)
+export const getTokenFromRequest = async (
+  req?: Request
+): Promise<string | null> => {
+  // ✅ API Routes / Route Handlers
   if (req) {
     const cookieHeader = req.headers.get('cookie')
     if (!cookieHeader) return null
@@ -62,9 +63,10 @@ export const getTokenFromRequest = (req?: Request): string | null => {
     return match?.[1] ?? null
   }
 
-  // ✅ Server Components / RSC
+  // ✅ Server Components (Next.js 16)
   try {
-    return cookies().get(COOKIE_NAME)?.value ?? null
+    const cookieStore = await cookies()
+    return cookieStore.get(COOKIE_NAME)?.value ?? null
   } catch {
     return null
   }
@@ -75,7 +77,7 @@ export const getTokenFromRequest = (req?: Request): string | null => {
 // -----------------------------
 export const buildSetCookie = (
   token: string,
-  maxAge = 60 * 60 * 24 * 7 // 7 days
+  maxAge = 60 * 60 * 24 * 7
 ) => {
   const secure = process.env.NODE_ENV === 'production'
   const sameSite = 'Lax'
