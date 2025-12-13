@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String?
+  password  String
+  role      Role       @default(INSTRUCTOR)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  courses   Course[]   @relation("CourseOwner")
+  progress  Progress[]
+}
+
+model Course {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  slug        String    @unique
+  modules     Module[]
+  owner       User      @relation("CourseOwner", fields: [ownerId], references: [id])
+  ownerId     String
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  // ✅ REQUIRED inverse relation
+  progress Progress[]
+}
+
+model Module {
+  id        String    @id @default(cuid())
+  title     String
+  content   String?
+  course    Course    @relation(fields: [courseId], references: [id])
+  courseId  String
+  order     Int
+  deletedAt DateTime?
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  percent   Float    @default(0.0)
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  STUDENT
+}
