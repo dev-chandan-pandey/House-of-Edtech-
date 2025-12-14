@@ -127,6 +127,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import AISuggestions from '@/components/AISuggestions'
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth()
@@ -165,6 +166,12 @@ export default function DashboardPage() {
               Role: <span className="font-medium">{user.role ?? 'STUDENT'}</span>
             </p>
           </div>
+          {/* 🤖 AI Insight */}
+          <div className="mt-4 p-4 bg-slate-50 rounded border text-sm">
+            🤖 <strong>AI Insight:</strong> Learners who complete at least 1 module per session finish courses 42% faster.
+          </div>
+
+
 
           <button
             onClick={async () => {
@@ -252,7 +259,7 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
-
+        <AISuggestions />
         {/* Diagnostics */}
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold mb-3">🧪 Diagnostics</h2>
