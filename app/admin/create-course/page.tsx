@@ -4,6 +4,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import BackToDashboardButton from '@/components/BackToDashboardButton'
 
 export default function CreateCoursePage() {
   const router = useRouter()
@@ -54,7 +55,10 @@ export default function CreateCoursePage() {
   // ---------------------------
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4">Create Course</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold mb-4">Create Course</h2>
+        <BackToDashboardButton />
+      </div>
 
       <form
         className="space-y-3"

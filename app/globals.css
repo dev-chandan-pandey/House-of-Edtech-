@@ -10,3 +10,6 @@
   @apply bg-sky-600 text-white rounded-md px-4 py-2 hover:bg-sky-700 transition;
 }
 
+.dashboard-link {
+  @apply block w-full text-left px-3 py-2 rounded-md hover:bg-slate-100 transition;
+}
