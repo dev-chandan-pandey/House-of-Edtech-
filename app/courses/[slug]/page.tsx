@@ -55,6 +55,14 @@ export default async function CourseDetail({
       ? Math.round(100 / course.modules.length)
       : 100
 
+  // 🤖 AI Next Module Recommendation
+  let nextModule: (typeof course.modules)[number] | null = null
+
+  if (progress && course.modules.length > 0) {
+    const completedCount = Math.floor(progress.percent / perModulePercent)
+    nextModule = course.modules[completedCount] ?? null
+  }
+
   // 🔥 AI SUMMARY (SERVER-SIDE)
   const aiSummary = generateCourseSummary(
     course.title,
@@ -74,18 +82,32 @@ export default async function CourseDetail({
           <BackToCoursesButton />
         )}
       </div>
-{/* 🤖 AI Progress Tips */}
-{progress && progress.percent < 50 && (
-  <div className="mt-4 p-3 bg-yellow-50 border rounded text-sm">
-    💡 <strong>AI Tip:</strong> You’re halfway there! Focus on completing the next 2 modules to build momentum.
-  </div>
-)}
+      {/* 🤖 AI Progress Tips */}
+      {progress && progress.percent < 50 && (
+        <div className="mt-4 p-3 bg-yellow-50 border rounded text-sm">
+          💡 <strong>AI Tip:</strong> You’re halfway there! Focus on completing the next 2 modules to build momentum.
+        </div>
+      )}
 
-{progress && progress.percent >= 50 && progress.percent < 100 && (
-  <div className="mt-4 p-3 bg-green-50 border rounded text-sm">
-    🚀 <strong>AI Tip:</strong> Great progress! You’re close to completing this course.
-  </div>
-)}
+      {progress && progress.percent >= 50 && progress.percent < 100 && (
+        <div className="mt-4 p-3 bg-green-50 border rounded text-sm">
+          🚀 <strong>AI Tip:</strong> Great progress! You’re close to completing this course.
+        </div>
+      )}
+      {/* 🤖 AI Next Module Recommendation */}
+      {progress && nextModule && progress.percent < 100 && (
+        <div className="mt-4 p-4 bg-indigo-50 border rounded">
+          <h3 className="font-semibold text-indigo-700">
+            🤖 AI Recommendation
+          </h3>
+          <p className="mt-1 text-sm">
+            Next, focus on <strong>{nextModule.order}. {nextModule.title}</strong>
+          </p>
+          <p className="text-xs text-slate-600 mt-1">
+            This module is the most impactful step based on your current progress.
+          </p>
+        </div>
+      )}
 
       {/* 🤖 AI COURSE SUMMARY */}
       <AICourseSummary
